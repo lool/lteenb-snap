@@ -1,0 +1,52 @@
+name: lteenb-lool
+version: '2017-02-10'
+summary: LTE Software eNodeB
+description: |
+  LTEENB is a LTE base station (eNodeB) implemented entirely in software
+  and running on a PC. The PC generates a baseband signal which is sent
+  to a radio front end doing the digital to analog conversion. The
+  reverse is done for the reception.
+grade: devel
+confinement: devmode
+
+apps:
+  lteenb:
+    command: lteenb-launcher
+  systune:
+    command: lte_init.sh
+  set-license:
+    command: set-license
+  set-rfbackend:
+    command: set-rfbackend
+
+parts:
+  # prebuilt LTEENB
+  lteenb:
+    plugin: dump
+    source: ../lteenb-linux-2017-02-10.tar.gz
+    stage:
+      - config/
+      - lib*.so
+      - lteenb*
+      - lte_init.sh
+      - trx_*.so
+  # LimeSDR TRX backend
+  trx-lms:
+    plugin: make
+    source: ../trx_lms7002m-linux-2017-02-10.tar.gz
+    build-packages: [ liblimesuite-dev, ]
+    install: |
+      cp -f trx_*.so $SNAPCRAFT_PART_INSTALL
+      mkdir -p $SNAPCRAFT_PART_INSTALL/config
+      rm -rf $SNAPCRAFT_PART_INSTALL/config/limeSDR
+      cp -rf config-limeSDR $SNAPCRAFT_PART_INSTALL/config/limeSDR
+  # snap integration bits
+  glue:
+    plugin: dump
+    source: glue
+    install: |
+      # ship static symlink pointing to writable dir
+      mkdir -p $SNAPCRAFT_PART_INSTALL/config
+      ln -sf /var/snap/lteenb-lool/current/rf_driver \
+          $SNAPCRAFT_PART_INSTALL/config/rf_driver
+
