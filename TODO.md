@@ -10,3 +10,5 @@
   be configured in /etc/rc.local
 
 * build limesuite from source?
+
+* sandboxing
