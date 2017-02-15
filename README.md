@@ -16,9 +16,9 @@ Then install with:
 sudo snap install --devmode lteenb*.snap
 ```
 
-(this will be `sudo snap install --devmode lteenb` when the snap is in the a store)
+(this will be `sudo snap install --devmode lteenb` when the snap is in a store)
 
-Do the system setup with:
+Configure radio backend and license with:
 ```shell
 sudo lteenb-lool.set-rfbackend limeSDR
 sudo lteenb-lool.set-license ~/lteenb.key
