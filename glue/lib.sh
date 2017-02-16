@@ -25,14 +25,39 @@ ensure_root() {
 }
 
 launch_lteenb() {
+    local logdir="/var/snap/$SNAP_NAME/current/logs"
+    local config="$SNAP_DATA/enb.cfg"
+
     ensure_root
     ensure_rfbackend
     ensure_license
 
-    "$SNAP/lteenb" "$@"
+    if ! [ -d "$logdir" ]; then
+        mkdir -p "$logdir"
+    fi
+    if ! [ -f "$config" ]; then
+        cat >"$config" <<EOF
+{
+    include "/snap/$SNAP_NAME/current/config/enb.cfg",
+
+    /* Override default values */
+    log_filename: "$logdir/enb0.log",
+
+    cell_list: [{
+        dl_earfcn: 2450, /* DL 874Mhz, UL: 829Mhz, band 5 for MWC 2017 */
+        n_rb_dl: 15,     /* 3Mhz */
+        sib_sched_list: [ "/snap/$SNAP_NAME/current/config/sib23_rb15.asn" ],
+    }]
+}
+EOF
+    fi
+
+    "$SNAP/lteenb" "$config" "$@"
 }
 
 set_license() {
+    local license
+
     ensure_root
 
     if [ "$#" != 1 ]; then

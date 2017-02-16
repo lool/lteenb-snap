@@ -1,4 +1,4 @@
-* add daemon mode and default config option
+* add daemon mode
 
 * allow passing a relative/simple config name to lteenb instead of full path
 
@@ -16,8 +16,6 @@
 * websocket client
 
 * debug docs - running by hand
-
-* config template including default config
 
 * document /etc/rc.local
 
