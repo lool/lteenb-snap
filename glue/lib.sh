@@ -60,6 +60,6 @@ set_rfbackend() {
         die "No such backend $1"
     fi
 
-    ln -sf "$SNAP/config/$1" "$SNAP_DATA/rf_driver"
+    ln -sf "/snap/$SNAP_NAME/current/config/$1" "$SNAP_DATA/rf_driver"
 }
 
