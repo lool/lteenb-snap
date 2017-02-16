@@ -24,7 +24,10 @@ parts:
   lteenb:
     plugin: dump
     source: ../lteenb-linux-2017-02-10.tar.gz
+    # needed by lteenb binaries
+    stage-packages: [ libsctp1, ]
     stage:
+      - usr/lib/*/*.so.*
       - config/
       - lib*.so
       - lteenb*
