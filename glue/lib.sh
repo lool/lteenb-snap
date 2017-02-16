@@ -52,6 +52,9 @@ launch_lteenb() {
 EOF
     fi
 
+    # liblimesuite writes caches to $HOME/.limesuite/
+    export HOME="$SNAP_DATA"
+
     "$SNAP/lteenb" "$config" "$@"
 }
 
