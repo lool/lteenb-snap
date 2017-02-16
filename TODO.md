@@ -1,19 +1,12 @@
-* allow passing a relative/simple config name to lteenb instead of full path
-
 * convert set-xyz scripts to snap configs
 
 * autodetect backend based on attached devices
 
-* do systune on startup? not sure this should be hardcoded in there, can
-  be configured in /etc/rc.local
+* find and document a way to run systune on startup in Ubuntu Core
 
 * build limesuite from source?
 
 * sandboxing
 
 * websocket client
-
-* debug docs - running by hand
-
-* document /etc/rc.local
 
