@@ -12,3 +12,12 @@
 * build limesuite from source?
 
 * sandboxing
+
+* websocket client
+
+* debug docs - running by hand
+
+* config template including default config
+
+* document /etc/rc.local
+
