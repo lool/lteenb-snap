@@ -24,25 +24,35 @@ parts:
   lteenb:
     plugin: dump
     source: ../lteenb-linux-2017-02-10.tar.gz
+    # don't copy missing shared libs
+    build-attributes: [ no-system-libraries, ]
     # needed by lteenb binaries
-    stage-packages: [ libsctp1, ]
+    stage-packages: [ libsctp1, libuhd003, ]
     stage:
-      - usr/lib/*/*.so.*
       - config/
       - lib*.so
       - lteenb*
       - lte_init.sh
       - trx_*.so
+      - usr/lib/*/*.so.*
   # LimeSDR TRX backend
   trx-lms:
     plugin: make
     source: ../trx_lms7002m-linux-2017-02-10.tar.gz
+    # don't automatically copy missing shared libs
+    build-attributes: [ no-system-libraries, ]
     build-packages: [ liblimesuite-dev, ]
+    stage-packages: [ liblimesuite17.01-1 ]
     install: |
       cp -f trx_*.so $SNAPCRAFT_PART_INSTALL
       mkdir -p $SNAPCRAFT_PART_INSTALL/config
       rm -rf $SNAPCRAFT_PART_INSTALL/config/limeSDR
       cp -rf config-limeSDR $SNAPCRAFT_PART_INSTALL/config/limeSDR
+    stage:
+      - config/
+      - lib/*/*.so.*
+      - trx_*.so
+      - usr/lib/*/*.so.*
   # snap integration bits
   glue:
     plugin: dump
