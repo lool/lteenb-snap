@@ -30,27 +30,68 @@ parts:
     # needed by lteenb binaries
     stage-packages: [ libsctp1, libuhd003, ]
     stage:
-      - config/
+      # config but not driver selection machinery
+      - -config/rf_driver
+      - -config/rf_select.sh
+      - config/*
+      # original binaries and script
       - lib*.so
       - lteenb*
       - lte_init.sh
       - trx_*.so
+      # from staged packages
+      - lib/*/*.so.*
       - usr/lib/*/*.so.*
+  # SoapySDR from source; build-dep of LimeSuite; not needed after build as we
+  # don't ship the SoapySDR LMS modules
+  soapysdr:
+    plugin: cmake
+    source: https://github.com/pothosware/SoapySDR.git
+    build-packages: [ gcc, g++ ]
+    prime:
+      # don't copy anything in the final snap
+      - -*
+  # LimeSuite from source; only need the libLimeSuite part
+  liblimesuite:
+    after: [ soapysdr, ]
+    plugin: cmake
+    source: https://github.com/myriadrf/LimeSuite.git
+    build-packages: [ libsqlite3-dev, libusb-1.0-0-dev ]
+    stage-packages: [ libsqlite3-0, libusb-1.0-0 ]
+    prime:
+      # only copy the shared library and libs from staged packages to the final
+      # snap; not headers or SoapySDR module
+      - lib/libLimeSuite.so.*
+      - lib/*/*.so.*
+      - usr/lib/*/*.so.*
+  # libLimeSuite from debs; if you prefer using the prebuilt APT packages
+  # instead of building from source, add the myriadrf/drivers PPA, comment out
+  # the soapysdr and liblimesuite parts above and uncomment this one
+#  liblimesuite:
+#    plugin: nil
+#    build-packages: [ liblimesuite-dev, ]
+#    stage-packages: [ liblimesuite17.01-1, ]
+#    stage:
+#      - lib/*/*.so.*
+#      - usr/lib/*/*.so.*
   # LimeSDR TRX backend
   trx-lms:
     plugin: make
     source: ../trx_lms7002m-linux-2017-02-10.tar.gz
+    after: [ liblimesuite, ]
     # don't automatically copy missing shared libs
     build-attributes: [ no-system-libraries, ]
-    build-packages: [ liblimesuite-dev, ]
-    stage-packages: [ liblimesuite17.01-1, ]
+    # workaround missing CPPFLAGS and LDFLAGS in Makefile
+    prepare: |
+      sed -i 's/(CXX) \$(CFLAGS)/(CXX) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS)/' \
+          Makefile
     install: |
       cp -f trx_*.so $SNAPCRAFT_PART_INSTALL
       mkdir -p $SNAPCRAFT_PART_INSTALL/config
       rm -rf $SNAPCRAFT_PART_INSTALL/config/limeSDR
       cp -rf config-limeSDR $SNAPCRAFT_PART_INSTALL/config/limeSDR
     stage:
-      - config/
+      - config/*
       - lib/*/*.so.*
       - trx_*.so
       - usr/lib/*/*.so.*
@@ -61,6 +102,6 @@ parts:
     install: |
       # ship static symlink pointing to writable dir
       mkdir -p $SNAPCRAFT_PART_INSTALL/config
-      ln -sf /var/snap/lteenb-lool/current/rf_driver \
+      ln -nsf /var/snap/lteenb-lool/current/rf_driver \
           $SNAPCRAFT_PART_INSTALL/config/rf_driver
 

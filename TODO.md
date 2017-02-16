@@ -4,8 +4,6 @@
 
 * find and document a way to run systune on startup in Ubuntu Core
 
-* build limesuite from source?
-
 * sandboxing
 
 * websocket client
