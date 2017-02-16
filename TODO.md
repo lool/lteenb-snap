@@ -1,5 +1,3 @@
-* add daemon mode
-
 * allow passing a relative/simple config name to lteenb instead of full path
 
 * convert set-xyz scripts to snap configs

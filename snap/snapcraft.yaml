@@ -12,6 +12,7 @@ confinement: devmode
 apps:
   lteenb:
     command: lteenb-launcher
+    daemon: simple
   systune:
     command: lte_init.sh
   set-license:
