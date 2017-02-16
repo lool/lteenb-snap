@@ -14,7 +14,7 @@ ensure_license() {
 
 ensure_rfbackend() {
     if ! [ -e "$SNAP_DATA/rf_driver" ]; then
-        die "Please set rf backend: $SNAP_NAME.set-rfbackend <license file>"
+        die "Please set rf backend: $SNAP_NAME.set-rfbackend <backend name"
     fi
 }
 
