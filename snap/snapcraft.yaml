@@ -43,7 +43,7 @@ parts:
     # don't automatically copy missing shared libs
     build-attributes: [ no-system-libraries, ]
     build-packages: [ liblimesuite-dev, ]
-    stage-packages: [ liblimesuite17.01-1 ]
+    stage-packages: [ liblimesuite17.01-1, ]
     install: |
       cp -f trx_*.so $SNAPCRAFT_PART_INSTALL
       mkdir -p $SNAPCRAFT_PART_INSTALL/config
