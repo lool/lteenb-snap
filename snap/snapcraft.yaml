@@ -24,7 +24,7 @@ parts:
   # prebuilt LTEENB
   lteenb:
     plugin: dump
-    source: ../lteenb-linux-2017-02-10.tar.gz
+    source: lteenb-linux-2017-02-10.tar.gz
     # don't copy missing shared libs
     build-attributes: [ no-system-libraries, ]
     # needed by lteenb binaries
@@ -77,7 +77,7 @@ parts:
   # LimeSDR TRX backend
   trx-lms:
     plugin: make
-    source: ../trx_lms7002m-linux-2017-02-10.tar.gz
+    source: trx_lms7002m-linux-2017-02-10.tar.gz
     after: [ liblimesuite, ]
     # don't automatically copy missing shared libs
     build-attributes: [ no-system-libraries, ]
