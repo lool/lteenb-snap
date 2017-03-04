@@ -77,14 +77,11 @@ parts:
   # LimeSDR TRX backend
   trx-lms:
     plugin: make
-    source: trx_lms7002m-linux-2017-02-10.tar.gz
+    source: https://github.com/lool/trx-lms7002m.git
     after: [ liblimesuite, ]
     # don't automatically copy missing shared libs
     build-attributes: [ no-system-libraries, ]
     # workaround missing CPPFLAGS and LDFLAGS in Makefile
-    prepare: |
-      sed -i 's/(CXX) \$(CFLAGS)/(CXX) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS)/' \
-          Makefile
     install: |
       cp -f trx_*.so $SNAPCRAFT_PART_INSTALL
       mkdir -p $SNAPCRAFT_PART_INSTALL/config
